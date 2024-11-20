@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import com.manjosh.labs.orderservice.AbstractIT;
 import com.manjosh.labs.orderservice.testData.TestDataFactory;
 import io.restassured.http.ContentType;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ class OrderControllerTest extends AbstractIT {
     class CreateOrderTests {
         @Test
         void shouldCreateOrderSuccessfully() {
+            mockProductByCode("P100", "Product 1", new BigDecimal("25.50"));
             var payload =
                     """
                     {
