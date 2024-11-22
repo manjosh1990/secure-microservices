@@ -1,11 +1,13 @@
 package com.manjosh.labs.orderservice.domain;
 
 import com.manjosh.labs.orderservice.domain.models.CreateOrderRequest;
+import com.manjosh.labs.orderservice.domain.models.OrderDTO;
 import com.manjosh.labs.orderservice.domain.models.OrderItem;
 import com.manjosh.labs.orderservice.domain.models.OrderStatus;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 class OrderMapper {
     static OrderEntity convertToEntity(CreateOrderRequest request) {
@@ -26,5 +28,21 @@ class OrderMapper {
         }
         newOrder.setItems(orderItems);
         return newOrder;
+    }
+
+    public static OrderDTO convertToDTO(OrderEntity order) {
+        Set<OrderItem> orderItems = order.getItems().stream()
+                .map(item -> new OrderItem(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
+                .collect(Collectors.toSet());
+
+        return new OrderDTO(
+                order.getOrderNumber(),
+                order.getUserName(),
+                orderItems,
+                order.getCustomer(),
+                order.getDeliveryAddress(),
+                order.getStatus(),
+                order.getComments(),
+                order.getCreatedAt());
     }
 }
